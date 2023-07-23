@@ -1,4 +1,5 @@
 #include "push_swap.h"
+#include <limits.h>
 
 t_stack *stack_last(t_stack *lst)
 {
@@ -37,7 +38,19 @@ void	print_stack (t_stack *stack)
 	ft_printf("%d ", stack->val);
 	ft_printf("\n");
 }
-
+void	print_stack_index (t_stack *stack)
+{
+	while (stack -> next != NULL)
+	{
+		ft_printf("%d ", stack->val);
+		ft_printf("%d ", stack->index);
+		ft_printf("\n");
+		stack = stack -> next;
+	}
+	ft_printf("%d ", stack->val);
+	ft_printf("%d ", stack->index);
+	ft_printf("\n");
+}
 t_stack *parse_stack(char **av, int ac)
 {
     int     i;
@@ -56,26 +69,59 @@ t_stack *parse_stack(char **av, int ac)
     }
     return (stack);
 }
-int ra(t_stack *a_stack)
+//int ra(t_stack *a_stack)
+//{
+	//still have to do 
+//}
+void index_stack(t_stack *stack, int ac)
 {
-	
+    int i;
+    int swap;
+    t_stack *head;
+    
+    i = 0;
+    head = stack;
+    swap = INT_MAX; 
+    stack = head;
+    while (i < ac)
+    {
+        while (stack != NULL)
+        {
+            if (stack->val == swap && stack->index == 0)
+                stack->index = i;	
+            stack = stack->next;
+        }
+        stack = head;
+        swap = INT_MAX;
+        while (stack != NULL)
+        {
+            if (stack->index == 0 && swap > stack->val)
+                swap = stack->val;
+            stack = stack->next;
+        }
+        stack = head;
+        i++;
+    }
 }
+
 int main(int ac, char **av)
 {
     t_stack *a_stack;
- 	t_stack *b_stack;
-	char		**bv;
+ 	//t_stack *b_stack;
+	//char		**bv;
 
-	bv = ft_calloc(4,sizeof(char **));
-	bv[1] = "10";
-	bv[2] = "11";
-	bv[3] = "9";
+	//bv = ft_calloc(4,sizeof(char **));
+	//bv[1] = "10";
+	//bv[2] = "11";
+	//bv[3] = "9";
     a_stack = parse_stack(av, ac);
-	b_stack = parse_stack(bv, ac);
-	print_stack(a_stack);
-	print_stack(b_stack);
-	ra(a_stack);
-	print_stack(a_stack);
+	//b_stack = parse_stack(bv, ac);
+	print_stack_index(a_stack);
+	index_stack(a_stack,ac);
+	print_stack_index(a_stack);
+	//print_stack(b_stack);
+	//ra(a_stack);
+	//print_stack(a_stack);
 	//print_stack(b_stack);	
 
 	return(0);
