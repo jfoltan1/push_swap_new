@@ -9,15 +9,15 @@ t_stack *stack_last(t_stack *lst)
         lst = lst->next;
     return (lst);
 }
-void    stack_add_back(t_stack *lst, int content,int index)
+void    stack_add_back(t_stack *lst, int content)
 {
     t_stack *old;
     t_stack *new;
+    //printf("number being stacked is %i\n", content);
     new = ft_calloc(sizeof(t_stack), 1);
     if (new == NULL)
         return ;
     new->val = content;
-	new ->index = index;
     new->next = NULL;
     if (lst == NULL)
     {
@@ -28,7 +28,6 @@ void    stack_add_back(t_stack *lst, int content,int index)
     old->next = new;
     return ;
 }
-
 void	print_stack (t_stack *stack)
 {
 	while (stack -> next != NULL)
@@ -65,30 +64,15 @@ t_stack *parse_stack(char **av, int ac)
         if (i == 1)
 			stack->val = ft_atoi(av[i]);
 		else
-			stack_add_back(stack, ft_atoi(av[i]), 0);
+			stack_add_back(stack, ft_atoi(av[i]));
         i++;
     }
     return (stack);
 }
-
-int rra (t_stack **a_stack)
-{
-	t_stack	*last_node;
-	t_stack *second_last_node;
-
-	last_node = *a_stack;
-	second_last_node = NULL;
-	while (last_node -> next != NULL)		
-	{
-		second_last_node = last_node;
-		last_node = last_node -> next;
-	}
-	last_node -> next = *a_stack;
-	*a_stack = last_node;
-	second_last_node -> next = NULL;
-    return 1;
-}
-
+//int ra(t_stack *a_stack)
+//{
+	//still have to do 
+//}
 void index_stack(t_stack *stack, int ac)
 {
     int i;
@@ -119,7 +103,40 @@ void index_stack(t_stack *stack, int ac)
         i++;
     }
 }
-
+int	three_nums(t_stack *a)
+{
+	int	*pos;
+	int i;
+	
+	if (!a)
+		return (-1);
+	i = 0;
+	while (a->next != NULL)
+	{
+		pos[i] = a->val;
+		a = a->next;
+		i++;
+	}
+	if (pos[0] < pos[1] && pos[1] < pos[2])
+		return (0);
+	else if (pos[0] > pos[1] && pos[1] < pos[2] && pos[2] > pos[0])
+		sa(a);
+	else if (pos[0] > pos[1] && pos[1] > pos[2])
+	{
+		sa(a);
+		rra(a);
+	}
+	else if (pos[0] > pos[1] && pos[1] < pos[2] && pos[2] < pos[0])
+		ra(a);
+	else if (pos[0] < pos[1] && pos[1] < pos[2] && pos[2] > pos[0])
+	{
+		sa(a);
+		ra(a);
+	}
+	else if (pos[0] < pos[1] && pos[1] > pos[2] && pos[2] < pos[0])
+		rra(a);
+	return (0);
+}
 int main(int ac, char **av)
 {
     t_stack *a_stack;
@@ -132,10 +149,10 @@ int main(int ac, char **av)
 	//bv[3] = "9";
     a_stack = parse_stack(av, ac);
 	//b_stack = parse_stack(bv, ac);
+	print_stack_index(a_stack);
 	index_stack(a_stack,ac);
 	print_stack_index(a_stack);
-	rra(&a_stack);
-	print_stack_index(a_stack);
+	three_nums(a_stack);	
 	//print_stack(b_stack);
 	//ra(a_stack);
 	//print_stack(a_stack);

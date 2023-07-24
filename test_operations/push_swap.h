@@ -24,9 +24,9 @@ int pa(t_stack **a_stack, t_stack **b_stack);
 int pb(t_stack **b_stack, t_stack **a_stack);
 int ra(t_stack *a_stack);
 int rb(t_stack **b_stack);
-int rra(t_stack *a_stack);
+int rra(t_stack **a_stack);
 int rrb(t_stack *b_stack);
 int rrr(t_stack *a_stack, t_stack *b_stack);
 t_stack *stack_last(t_stack *lst);
-void    stack_add_back(t_stack *lst, int content);
+void    stack_add_back(t_stack *lst, int content, int index);
 #endif
