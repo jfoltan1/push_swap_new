@@ -88,6 +88,21 @@ int rra (t_stack **a_stack)
 	second_last_node -> next = NULL;
     return 1;
 }
+int is_sorted(t_stack *stack)
+{
+	while (stack -> next != NULL)
+	{
+		if (stack -> index < stack -> next -> index)
+			stack = stack -> next;
+		else 
+			{
+				ft_printf("Stack is nicht sorted!");
+				return (0);
+			}
+	}
+	ft_printf("Stack is sorted!");
+	return (1);
+}
 
 void index_stack(t_stack *stack, int ac)
 {
@@ -134,8 +149,9 @@ int main(int ac, char **av)
 	//b_stack = parse_stack(bv, ac);
 	index_stack(a_stack,ac);
 	print_stack_index(a_stack);
-	rra(&a_stack);
-	print_stack_index(a_stack);
+	//rra(&a_stack);
+	//print_stack_index(a_stack);
+	is_sorted(a_stack);
 	//print_stack(b_stack);
 	//ra(a_stack);
 	//print_stack(a_stack);
