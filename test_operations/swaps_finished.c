@@ -98,3 +98,42 @@ int rra (t_stack **a_stack)
 	second_last_node -> next = NULL;
     return 1;
 }
+int sort_3(t_stack **a_stack) 
+{
+	if (!(*a_stack))
+		return -1;
+
+	int pos[3];
+	int i = 0;
+	t_stack *stack = *a_stack;
+
+	while (stack->next != NULL) 
+	{
+		pos[i] = stack->index;
+		stack = stack->next;
+		i++;
+	}
+	pos[i] = stack->index;
+
+	stack = *a_stack;
+	if (pos[0] < pos[1] && pos[1] < pos[2])
+		return (0);
+	else if (pos[0] > pos[1] && pos[1] < pos[2] && pos[2] > pos[0])
+		sa(*a_stack);
+	else if (pos[0] > pos[1] && pos[1] > pos[2])
+	{
+		sa(stack);
+		rra(a_stack);
+	}
+	else if (pos[0] > pos[1] && pos[1] < pos[2] && pos[2] < pos[0])
+		ra(*a_stack);
+	else if (pos[0] < pos[1] && pos[1] > pos[2] && pos[2] > pos[0])
+	{
+		sa(stack);
+		ra(*a_stack);
+	}
+	else if (pos[0] < pos[1] && pos[1] > pos[2] && pos[2] < pos[0])
+		rra(a_stack);
+
+	return (0);
+}

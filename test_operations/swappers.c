@@ -10,24 +10,25 @@ t_stack *stack_last(t_stack *lst)
     return (lst);
 }
 
-void    stack_add_back(t_stack *lst, int content,int index)
+void stack_add_back(t_stack **lst, int content, int index)
 {
-    t_stack *old;
     t_stack *new;
-    new = ft_calloc(sizeof(t_stack), 1);
+	
+	new = ft_calloc(1, sizeof(t_stack));
     if (new == NULL)
-        return ;
+        return;
     new->val = content;
-	new ->index = index;
+    new->index = index;
     new->next = NULL;
-    if (lst == NULL)
+
+    if (*lst == NULL)
     {
-        lst = new;
-        return ;
+        *lst = new;
+        return;
     }
-    old = stack_last(lst);
+
+    t_stack *old = stack_last(*lst);
     old->next = new;
-    return ;
 }
 
 void	print_stack (t_stack *stack)
@@ -68,7 +69,7 @@ t_stack *parse_stack(char **av, int ac)
         if (i == 1)
 			stack->val = ft_atoi(av[i]);
 		else
-			stack_add_back(stack, ft_atoi(av[i]), 0);
+			stack_add_back(&stack, ft_atoi(av[i]), 0);
         i++;
     }
     return (stack);
@@ -145,8 +146,8 @@ int rra (t_stack **a_stack)
 	t_stack	*last_node;
 	t_stack *second_last_node;
 
-	last_node = *a_stack;
-	second_last_node = NULL;
+	last_node = *a_stack;//ok
+	second_last_node = NULL;//ok
 	while (last_node -> next != NULL)		
 	{
 		second_last_node = last_node;
@@ -161,56 +162,61 @@ int rra (t_stack **a_stack)
 int	sa(t_stack *a_stack)
 {
 	int swap;
+	int swap_index;
 	t_stack *head;
 	head = a_stack;
 	if (a_stack -> next == NULL)
 		return(0);
 	swap = a_stack -> val;
+	swap_index = a_stack -> index;
 	a_stack -> val = a_stack -> next -> val;
+	a_stack -> index = a_stack -> next -> index;
+
 	a_stack -> next -> val = swap;
-	/* do  I need to free swap?  */
+	a_stack -> next -> index = swap_index;
 	a_stack = head;
 	return(1);
 }
-int	sort_3(t_stack *stack)
+int sort_3(t_stack **a_stack) 
 {
-	int	*pos;
-	int	i;
-	t_stack	*head;
+	if (!(*a_stack))
+		return -1;
 
-	if (!stack)
-		return (-1);
-	i = 0;
-	head = stack;
-	pos = malloc(3 * sizeof(int));
-	while (stack -> next != NULL)
+	int pos[3];
+	int i = 0;
+	t_stack *stack = *a_stack;
+
+	while (stack->next != NULL) 
 	{
-		pos[i] = stack -> index;
+		pos[i] = stack->index;
 		stack = stack->next;
 		i++;
 	}
-	pos[i] = stack -> index;
-	stack = head;
+	pos[i] = stack->index;
+
+	stack = *a_stack;
 	if (pos[0] < pos[1] && pos[1] < pos[2])
 		return (0);
 	else if (pos[0] > pos[1] && pos[1] < pos[2] && pos[2] > pos[0])
-		rra(&stack);
+		sa(*a_stack);
 	else if (pos[0] > pos[1] && pos[1] > pos[2])
 	{
 		sa(stack);
-		rra(&stack);
+		rra(a_stack);
 	}
 	else if (pos[0] > pos[1] && pos[1] < pos[2] && pos[2] < pos[0])
-		ra(stack);
-	else if (pos[0] < pos[1] && pos[1] < pos[2] && pos[2] > pos[0])
+		ra(*a_stack);
+	else if (pos[0] < pos[1] && pos[1] > pos[2] && pos[2] > pos[0])
 	{
 		sa(stack);
-		ra(stack);
+		ra(*a_stack);
 	}
 	else if (pos[0] < pos[1] && pos[1] > pos[2] && pos[2] < pos[0])
-		rra(&stack);
+		rra(a_stack);
+
 	return (0);
 }
+
 int main(int ac, char **av)
 {
     t_stack *a_stack;
@@ -220,8 +226,9 @@ int main(int ac, char **av)
 
 	index_stack(a_stack,ac);
 	print_stack_index(a_stack);
+	//sa(a_stack);
 	//rra(&a_stack);
-	sort_3(a_stack);
+	sort_3(&a_stack);
 
 	print_stack_index(a_stack);
 	
