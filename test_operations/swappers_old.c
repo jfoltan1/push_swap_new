@@ -121,44 +121,26 @@ void index_stack(t_stack *stack, int ac)
     }
 	stack =	head;
 }
-
-int pa(t_stack **a_stack, t_stack **b_stack)
+int ra(t_stack *a_stack)
 {
-    if (*b_stack == NULL)
-        return 0;
+    int first_val; 
+    int first_index;
+	first_val = a_stack->val;
+	first_index = a_stack->index;
 
-    t_stack *new = malloc(sizeof(t_stack));
-    if (new == NULL)
-        return 0;
-
-    new->val = (*b_stack)->val;
-    new->index = (*b_stack)->index;
-
-    new->next = (*a_stack);
-    (*a_stack) = new;
-    (*b_stack) = (*b_stack)->next;
+        while (a_stack->next != NULL)
+    {
+        a_stack->val = a_stack->next->val;
+        a_stack->index = a_stack->next->index;
+        a_stack = a_stack->next;
+    }
+    a_stack->val = first_val;
+    a_stack->index = first_index;
+    a_stack->next = NULL;
 
     return 1;
 }
 
-int pb(t_stack **a_stack, t_stack **b_stack)
-{
-    if (*a_stack == NULL)
-        return 0;
-
-    t_stack *new = malloc(sizeof(t_stack));
-    if (new == NULL)
-        return 0;
-
-    new->val = (*a_stack)->val;
-    new->index = (*a_stack)->index;
-
-    new->next = (*b_stack);
-    (*b_stack) = new;
-    (*a_stack) = (*a_stack)->next;
-
-    return 1;
-}
 int rra (t_stack **a_stack)
 {
 	t_stack	*last_node;
@@ -176,86 +158,110 @@ int rra (t_stack **a_stack)
 	second_last_node -> next = NULL;
     return 1;
 }
-int ra(t_stack **a_stack)
-{
-    if (*a_stack == NULL || (*a_stack)->next == NULL)
-        return(-1);
 
-    t_stack *first_node = *a_stack;
-    *a_stack = (*a_stack)->next;
-
-    t_stack *current_node = *a_stack;
-    while (current_node->next != NULL)
-    {
-        current_node = current_node->next;
-    }
-
-    current_node->next = first_node;
-    first_node->next = NULL;
-	return(0);
-}
-int sa(t_stack **a_stack)
+int	sa(t_stack *a_stack)
 {
 	int swap;
-    int swap_index; 
-	if (*a_stack == NULL || (*a_stack)->next == NULL)
-        return (-1);
-	 swap = (*a_stack)->val;
-	 swap_index = (*a_stack)->index;
-    (*a_stack)->val = (*a_stack)->next->val;
-    (*a_stack)->index = (*a_stack)->next->index;
+	int swap_index;
+	t_stack *head;
+	head = a_stack;
+	if (a_stack -> next == NULL)
+		return(0);
+	swap = a_stack -> val;
+	swap_index = a_stack -> index;
+	a_stack -> val = a_stack -> next -> val;
+	a_stack -> index = a_stack -> next -> index;
 
-    (*a_stack)->next->val = swap;
-    (*a_stack)->next->index = swap_index;
-	return (0);
+	a_stack -> next -> val = swap;
+	a_stack -> next -> index = swap_index;
+	a_stack = head;
+	return(1);
 }
-int sort_3(t_stack **a_stack)
-{
-    t_stack *stack;
-
-    int pos[3];
-    int i;
-	
-	i = 0;
-	stack = *a_stack;
-    if (!stack)
-        return(-1);
-
-    while (stack && i < 3)
-    {
-        pos[i] = stack->index;
-        stack = stack->next;
-        i++;
-    }
-
-    if (pos[0] < pos[1] && pos[1] < pos[2])
-        return(0);
-    else if (pos[0] > pos[1] && pos[1] < pos[2] && pos[2] > pos[0])
-        sa(a_stack);
-    else if (pos[0] > pos[1] && pos[1] > pos[2])
-    {
-        sa(a_stack);
-        rra(a_stack);
-	}
-    else if (pos[0] > pos[1] && pos[1] < pos[2] && pos[2] < pos[0])
-        ra(a_stack);
-    else if (pos[0] < pos[1] && pos[1] > pos[2] && pos[2] > pos[0])
-    {
-        sa(a_stack);
-        ra(a_stack);
-    }
-    else if (pos[0] < pos[1] && pos[1] > pos[2] && pos[2] < pos[0])
-        rra(a_stack);
-return(0);
-}
-
-int sort_4(t_stack **a_stack, t_stack **b_stack)
+int sort_3(t_stack **a_stack) 
 {
 	if (!(*a_stack))
+		return -1;
+
+	int pos[3];
+	int i = 0;
+	t_stack *stack = *a_stack;
+
+	while (stack->next != NULL) 
+	{
+		pos[i] = stack->index;
+		stack = stack->next;
+		i++;
+	}
+	pos[i] = stack->index;
+
+	stack = *a_stack;
+	if (pos[0] < pos[1] && pos[1] < pos[2])
+		return (0);
+	else if (pos[0] > pos[1] && pos[1] < pos[2] && pos[2] > pos[0])
+		sa(*a_stack);
+	else if (pos[0] > pos[1] && pos[1] > pos[2])
+	{
+		sa(stack);
+		rra(a_stack);
+	}
+	else if (pos[0] > pos[1] && pos[1] < pos[2] && pos[2] < pos[0])
+		ra(*a_stack);
+	else if (pos[0] < pos[1] && pos[1] > pos[2] && pos[2] > pos[0])
+	{
+		sa(stack);
+		ra(*a_stack);
+	}
+	else if (pos[0] < pos[1] && pos[1] > pos[2] && pos[2] < pos[0])
+		rra(a_stack);
+
+	return (0);
+}
+t_stack *find_smallest_node(t_stack *stack) {
+    if (stack == NULL) {
+        return NULL; // Stack is empty
+    }
+
+    t_stack *smallest_node = stack;
+    int smallest_value = stack->index;
+
+    while (stack != NULL) {
+        if (stack->index < smallest_value) {
+            smallest_node = stack;
+            smallest_value = stack->index;
+        }
+        stack = stack->next;
+    }
+
+    return smallest_node;
+}
+int sort_4(t_stack **a_stack, t_stack **b_stack)
+{
+	t_stack *smallest_node;
+	int smallest_value;
+	
+	if (!(*a_stack))
 		return (-1);
-	while ((*a_stack) -> index != 1)
-			ra(a_stack);
-	pb(a_stack, b_stack);
+	
+	smallest_node = *a_stack;
+	smallest_value = (*a_stack)->index;
+	t_stack *stack = *a_stack;
+
+	while (stack != NULL)
+	{
+		if (stack->index < smallest_value) 
+		{
+			smallest_node = stack;
+			smallest_value = stack->index;
+		}
+		stack = stack->next;
+	}
+
+	while ((*a_stack) != smallest_node)
+	{
+		sa(*a_stack);
+	}
+
+	pb(b_stack, a_stack);
 	sort_3(a_stack);
 	pa(a_stack,b_stack);
 	return (0);
@@ -266,10 +272,13 @@ int main(int ac, char **av)
 	t_stack *b_stack;
 	
     a_stack = parse_stack(av, ac);
-	b_stack = parse_stack(NULL,0);
+	b_stack = malloc(sizeof(t_stack));
 	index_stack(a_stack,ac);
 	print_stack_index(a_stack);
-	sort_4(&a_stack, &b_stack);
+	//sa(a_stack);
+	//rra(&a_stack);
+	sort_4(&a_stack);
+
 	print_stack_index(a_stack);
 	
 	return(0);

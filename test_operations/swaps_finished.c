@@ -100,12 +100,15 @@ int rra (t_stack **a_stack)
 }
 int sort_3(t_stack **a_stack) 
 {
-	if (!(*a_stack))
-		return -1;
 
 	int pos[3];
-	int i = 0;
-	t_stack *stack = *a_stack;
+	int i;
+	t_stack *stack;
+	
+	if (!(*a_stack))
+		return -1;
+	i = 0;
+	stack = *a_stack;
 
 	while (stack->next != NULL) 
 	{
