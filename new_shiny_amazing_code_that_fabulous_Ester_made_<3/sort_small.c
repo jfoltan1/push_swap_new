@@ -1,3 +1,5 @@
+#include "push_swap.h"
+
 int sort_3(t_stack **a_stack)
 {
     t_stack *stack;
