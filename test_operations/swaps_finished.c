@@ -32,7 +32,7 @@ int	pa(t_stack **a_stack, t_stack **b_stack)
 	t_stack	*new;
 
 	if ((*b_stack) == NULL)
-		return (0); 
+		return (0);
 	new = malloc(sizeof(t_stack));
 	if (new == NULL)
 		return (0);
@@ -50,7 +50,7 @@ int	pb(t_stack **a_stack, t_stack **b_stack)
 	t_stack	*new;
 
 	if ((*a_stack) == NULL)
-		return (0); 
+		return (0);
 	new = malloc(sizeof(t_stack));
 	if (new == NULL)
 		return (0);
@@ -64,7 +64,7 @@ int	pb(t_stack **a_stack, t_stack **b_stack)
 }
 int ra(t_stack *a_stack)
 {
-    int first_val; 
+    int first_val;
     int first_index;
 	first_val = a_stack->val;
 	first_index = a_stack->index;
@@ -88,7 +88,7 @@ int rra (t_stack **a_stack)
 
 	last_node = *a_stack;
 	second_last_node = NULL;
-	while (last_node -> next != NULL)		
+	while (last_node -> next != NULL)
 	{
 		second_last_node = last_node;
 		last_node = last_node -> next;
@@ -98,19 +98,19 @@ int rra (t_stack **a_stack)
 	second_last_node -> next = NULL;
     return 1;
 }
-int sort_3(t_stack **a_stack) 
+int sort_3(t_stack **a_stack)
 {
 
 	int pos[3];
 	int i;
 	t_stack *stack;
-	
+
 	if (!(*a_stack))
 		return -1;
 	i = 0;
 	stack = *a_stack;
 
-	while (stack->next != NULL) 
+	while (stack->next != NULL)
 	{
 		pos[i] = stack->index;
 		stack = stack->next;
@@ -139,4 +139,39 @@ int sort_3(t_stack **a_stack)
 		rra(a_stack);
 
 	return (0);
+}
+int rb(t_stack **b_stack)
+{
+    t_stack *first_node;
+	t_stack *current_node;
+    if (*b_stack == NULL || (*b_stack)->next == NULL)
+		return(-1);
+	first_node = *b_stack;
+    *b_stack = (*b_stack)->next;
+	current_node = *b_stack;
+    while (current_node->next != NULL)
+    {
+        current_node = current_node->next;
+    }
+
+    current_node->next = first_node;
+    first_node->next = NULL;
+	return(0);
+}
+int sort_5(t_stack **a_stack, t_stack **b_stack)
+{
+	if (!(*a_stack) || !(*b_stack))
+		return (-1);
+	while ((*a_stack) -> index != 1)
+		ra(a_stack);
+	pb(a_stack,b_stack);
+	while ((*a_stack) -> index != 2)
+		ra(a_stack);
+	pb(a_stack,b_stack);
+	sort_3(a_stack);
+	while ((*b_stack) -> index != 2)
+		rb(b_stack);
+	pa(a_stack,b_stack);
+	pa(a_stack,b_stack);
+	return(0);
 }

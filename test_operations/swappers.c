@@ -13,7 +13,7 @@ t_stack *stack_last(t_stack *lst)
 void stack_add_back(t_stack **lst, int content, int index)
 {
     t_stack *new;
-	
+
 	new = ft_calloc(1, sizeof(t_stack));
     if (new == NULL)
         return;
@@ -81,7 +81,7 @@ int is_sorted(t_stack *stack)
 	{
 		if (stack -> index < stack -> next -> index)
 			stack = stack -> next;
-		else 
+		else
 			{
 				ft_printf("Stack is nicht sorted!\n");
 				return (0);
@@ -96,16 +96,16 @@ void index_stack(t_stack *stack, int ac)
     int i;
     int swap;
     t_stack *head;
-    
+
     i = 0;
     head = stack;
-    swap = INT_MAX; 
+    swap = INT_MAX;
     while (i < ac)
     {
         while (stack != NULL)
         {
             if (stack->val == swap && stack->index == 0)
-                stack->index = i;	
+                stack->index = i;
             stack = stack->next;
         }
         stack = head;
@@ -166,7 +166,7 @@ int rra (t_stack **a_stack)
 
 	last_node = *a_stack;//ok
 	second_last_node = NULL;//ok
-	while (last_node -> next != NULL)		
+	while (last_node -> next != NULL)
 	{
 		second_last_node = last_node;
 		last_node = last_node -> next;
@@ -194,10 +194,28 @@ int ra(t_stack **a_stack)
     first_node->next = NULL;
 	return(0);
 }
+int rb(t_stack **b_stack)
+{
+    t_stack *first_node;
+	t_stack *current_node;
+    if (*b_stack == NULL || (*b_stack)->next == NULL)
+		return(-1);
+	first_node = *b_stack;
+    *b_stack = (*b_stack)->next;
+	current_node = *b_stack;
+    while (current_node->next != NULL)
+    {
+        current_node = current_node->next;
+    }
+
+    current_node->next = first_node;
+    first_node->next = NULL;
+	return(0);
+}
 int sa(t_stack **a_stack)
 {
 	int swap;
-    int swap_index; 
+    int swap_index;
 	if (*a_stack == NULL || (*a_stack)->next == NULL)
         return (-1);
 	 swap = (*a_stack)->val;
@@ -215,7 +233,7 @@ int sort_3(t_stack **a_stack)
 
     int pos[3];
     int i;
-	
+
 	i = 0;
 	stack = *a_stack;
     if (!stack)
@@ -251,7 +269,7 @@ return(0);
 
 int sort_4(t_stack **a_stack, t_stack **b_stack)
 {
-	if (!(*a_stack))
+	if (!(*a_stack) || !(*b_stack))
 		return (-1);
 	while ((*a_stack) -> index != 1)
 			ra(a_stack);
@@ -260,17 +278,35 @@ int sort_4(t_stack **a_stack, t_stack **b_stack)
 	pa(a_stack,b_stack);
 	return (0);
 }
+int sort_5(t_stack **a_stack, t_stack **b_stack)
+{
+	if (!(*a_stack) || !(*b_stack))
+		return (-1);
+	while ((*a_stack) -> index != 1)
+		ra(a_stack);
+	pb(a_stack,b_stack);
+	while ((*a_stack) -> index != 2)
+			ra(a_stack);
+	pb(a_stack,b_stack);
+	sort_3(a_stack);
+	while ((*b_stack) -> index != 2)
+		rb(b_stack);
+	pa(a_stack,b_stack);
+	pa(a_stack,b_stack);
+	return(0);
+}
 int main(int ac, char **av)
 {
     t_stack *a_stack;
 	t_stack *b_stack;
-	
+
     a_stack = parse_stack(av, ac);
 	b_stack = parse_stack(NULL,0);
 	index_stack(a_stack,ac);
 	print_stack_index(a_stack);
-	sort_4(&a_stack, &b_stack);
+	// sort_4(&a_stack, &b_stack);
+	sort_5(&a_stack,&b_stack);
 	print_stack_index(a_stack);
-	
+
 	return(0);
 }
