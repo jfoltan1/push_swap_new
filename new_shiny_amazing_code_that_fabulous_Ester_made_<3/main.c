@@ -27,7 +27,7 @@ t_stack *radix_sort(t_stack *a, t_stack *b)
         j = 0;
         i++;
         while (b != NULL)
-          push(&a, &b, "pa");
+            push(&a, &b, "pa");
     }
     return (a);
 }
@@ -48,23 +48,36 @@ int argcheck(char **av, int ac)
     int i;
     int j;
     i = 1;
-    j = 0;
     if (ac < 3)
         exit (1);
-    while (av != NULL)
+    //check for non-digits and dups
+    //missing limits for int size
+    i = 1;
+    while (av[i])
     {
-        while (av[i] != NULL)
+        j = 0;
+        while (av[i][j] != '\0')
         {
-            if (!ft_isdigit(av[i][j]))
+            if (!ft_isdigit(av[i][j]) && av[i][j] != '-')
             {
-                ft_printf("Error\n");
+                ft_printf("Error1\n");
                 exit(2);
             }
             j++;
         }
         j = 0;
+        while (j < i)
+        {
+            if (ft_atoi(av[j]) == ft_atoi(av[i]))
+            {
+                ft_printf("Error2\n");
+                exit(2);
+            }
+            j++;
+        }
         i++;
     }
+    return(1);
 }
 int main(int ac, char **av)
 {
