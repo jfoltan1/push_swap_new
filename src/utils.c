@@ -88,10 +88,10 @@ void	if_args(char **args, int i, int j, int x)
 	{
 		if (x == 1)
 			if (!ft_isdigit(args[i][j]) && args[i][j] != '-')
-				error();
+				error(args);
 		if (x == 2)
 			if (ft_atoi(args[j]) == ft_atoi(args[i]))
-				error();
+				error(args);
 	}
 	else
 		return ;

@@ -6,7 +6,7 @@
 /*   By: jfoltan <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 14:14:42 by jfoltan           #+#    #+#             */
-/*   Updated: 2023/08/04 17:11:10 by jfoltan          ###   ########.fr       */
+/*   Updated: 2023/08/05 19:38:56 by jfoltan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@ void	index_util(t_stack *stack, int i, int swap)
 	}
 }
 
-void	error(void)
+void	error(char **args)
 {
-	ft_putstr_fd("Error\n", 1);
+	ft_putstr_fd("Error\n", 2);
+	free_arr(args);
 	exit(2);
 }
 
@@ -34,7 +35,7 @@ int	preliminary_check(char **args)
 	int		j;
 	long	swap;
 
-	i = 0;
+	i = -1;
 	j = 0;
 	swap = 0;
 	while (args[++i])
@@ -44,14 +45,14 @@ int	preliminary_check(char **args)
 			if (args[i][j] == '-' && j == 0)
 				j++;
 			if (!ft_isdigit(args[i][j]))
-				error();
+				error(args);
 			if (ft_isalpha(args[i][j]))
-				error();
+				error(args);
 			j++;
 		}
 		swap = ft_atol(args[i]);
 		if (swap > INT_MAX || swap < INT_MIN)
-			error();
+			error(args);
 		j = 0;
 	}
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: jfoltan <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 13:22:01 by emollebr          #+#    #+#             */
-/*   Updated: 2023/08/04 14:18:32 by jfoltan          ###   ########.fr       */
+/*   Updated: 2023/08/05 19:36:33 by jfoltan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,6 @@ int			sort_4(t_stack **a_stack, t_stack **b_stack);
 int			sort_5(t_stack **a_stack, t_stack **b_stack);
 t_stack		**radix_sort(t_stack **a, t_stack **b);
 int			preliminary_check(char **args);
-void		error(void);
+void		error(char **args);
 
 #endif
